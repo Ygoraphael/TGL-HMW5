@@ -55,7 +55,7 @@ namespace BlazorCRUD.Data
         {
             if (id != student.StudentId)
             {
-                return BadRequest();
+                return BadRequest("Student doesn't exist");
             }
 
             _context.Entry(student).State = EntityState.Modified;
@@ -76,7 +76,7 @@ namespace BlazorCRUD.Data
                 }
             }
 
-            return NoContent();
+            return Content("Student updated");
         }
 
         // POST: api/Students

@@ -1,0 +1,217 @@
+{
+	"info": {
+		"_postman_id": "544901eb-8176-4143-9b57-a889ff30cdb4",
+		"name": "Blazor CRUD",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "16534877"
+	},
+	"item": [
+		{
+			"name": "Get All Items",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Create correct\", () => {\r",
+							"  pm.expect(pm.response.code).to.eql(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Body correct response\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include(\"studentId\");\r",
+							"    pm.expect(pm.response.text()).to.include(\"name\");\r",
+							"    pm.expect(pm.response.text()).to.include(\"email\");\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{urlBlazorCrud}}/Students",
+					"host": [
+						"{{urlBlazorCrud}}"
+					],
+					"path": [
+						"Students"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Get by id",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Get by id correct\", () => {\r",
+							"  pm.expect(pm.response.code).to.eql(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"The response has all properties\", () => {\r",
+							"    const responseJson = pm.response.json();\r",
+							"    pm.expect(responseJson.name).to.be.a('string');    \r",
+							"    pm.expect(responseJson.email).to.have.length.gte(3);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{urlBlazorCrud}}/Students/3",
+					"host": [
+						"{{urlBlazorCrud}}"
+					],
+					"path": [
+						"Students",
+						"3"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Create",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Create correct\", () => {\r",
+							"  pm.expect(pm.response.code).to.eql(201);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Body correct response\", function () {\r",
+							"    pm.expect(pm.response.text()).to.include(\"studentId\");\r",
+							"    pm.expect(pm.response.text()).to.include(\"name\");\r",
+							"    pm.expect(pm.response.text()).to.include(\"email\");\r",
+							"})"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"Name\":\"Nome qualquer\",\r\n    \"Email\":\"qualquer@gmail.com\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{urlBlazorCrud}}/students",
+					"host": [
+						"{{urlBlazorCrud}}"
+					],
+					"path": [
+						"students"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Update student",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Update correct\", () => {\r",
+							"  pm.expect(pm.response.code).to.eql(200);\r",
+							"  pm.expect(pm.response.text()).to.include(\"Student updated\");\r",
+							"});\r",
+							"\r",
+							"\r",
+							"pm.test(\"Error update student nonexistent\", () => {\r",
+							"  pm.expect(pm.response.code).to.eql(400);\r",
+							"  pm.expect(pm.response.text()).to.include(\"Student doesn't exist\");\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "PUT",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"StudentId\": \"4\",\r\n    \"Name\":\"Nome qualquer\",\r\n    \"Email\":\"qualquer@gmail.com\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{urlBlazorCrud}}/students/6",
+					"host": [
+						"{{urlBlazorCrud}}"
+					],
+					"path": [
+						"students",
+						"6"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Delete Student",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Delete correct\", function () {\r",
+							"    pm.response.to.have.status(200);\r",
+							"    pm.expect(pm.response.text()).to.include(\"Deleted\")\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Error delete student nonexistent\", function () {\r",
+							"    pm.sendRequest({\r",
+							"        url: 'https://localhost:7105/api/students/17',\r",
+							"        method: 'DELETE'\r",
+							"    }, function (err, response) {\r",
+							"        pm.response.to.have.status(404);\r",
+							"        pm.expect(pm.response.text()).to.include(\"There is no student with this id.\");\r",
+							"    });\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{urlBlazorCrud}}/students/20",
+					"host": [
+						"{{urlBlazorCrud}}"
+					],
+					"path": [
+						"students",
+						"20"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
