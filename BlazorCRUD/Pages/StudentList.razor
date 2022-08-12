@@ -1,0 +1,57 @@
+﻿@page "/Student"
+@inject HttpClient  http
+@using BlazorCRUD.Data
+@using Microsoft.EntityFrameworkCore
+
+
+<h3>Students</h3>
+<p>
+    <a href="/addstudent" class="btn btn-dark">Create New Student</a>
+</p>
+@if (_students == null)
+{
+    <img src="/images/basicloader.gif" />
+}
+else
+{
+    <table class='table table-responsive table-striped'>
+        <thead>
+            <tr>
+                <th scope="col">Name</th>
+                <th scope="col">Email</th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var student in _students)
+            {
+                <tr>
+                    <td scope="row">@student.Name</td>
+                    <td scope="row">@student.Email</td>
+                    <td>
+                        <a href="/editStudent/@student.StudentId" class="btn btn-warning">Edit</a>                        
+                        <button class="btn btn-danger" @onclick="()=>Delete(student)">Delete</button>
+                    </td>
+                </tr>
+            }
+        </tbody>
+    </table>
+}
+@code {
+    [Inject] AppDbContext AppDbContext { get; set; }
+    private List<Student> _students = new List<Student>();
+    [Inject] NavigationManager navigationManager { get; set; }
+
+    protected override async Task OnInitializedAsync()
+    {   
+        _students = await AppDbContext.Students.ToListAsync();
+    }
+
+    private async Task Delete(Student StudentDelete)
+    {
+        AppDbContext.Students.Remove(StudentDelete);
+        await AppDbContext.SaveChangesAsync();
+        _students.Remove(StudentDelete);
+        StateHasChanged();
+    }
+    //<button class="btn btn-info" @onclick="@(() => navigationManager.NavigateTo($"/editStudent/{student.StudentId.ToString()}"))">Edit</button>
+} 
