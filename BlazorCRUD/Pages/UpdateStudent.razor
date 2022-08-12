@@ -14,15 +14,11 @@
         <label for="Email"> Email </label>
         <InputText @bind-Value="_student.Email" class="form-control" id="Email"/>
     </div>
-
-    <DataAnnotationsValidator/>
-    <ValidationSummary />
-
-    <button class="btn btn-success" type="submit">Save</button>
-    <button @onclick="@(() => navigationManager.NavigateTo("/Student"))" class="btn btn-secondary" >Cancel</button>
-
-
-
+    
+    <div>
+        <button class="btn btn-success" type="submit">Save</button>
+        <NavLink href="/Student" class="btn btn-secondary">Cancel</NavLink>
+    </div>
 
 </EditForm>
 

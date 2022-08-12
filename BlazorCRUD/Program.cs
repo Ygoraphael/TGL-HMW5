@@ -10,6 +10,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+builder.Services.AddScoped<StudentsController>();
 
 // Projeto Server Side não registrar o HttpClient por padrão
 if (!builder.Services.Any(x => x.ServiceType == typeof(HttpClient)))
@@ -24,6 +25,8 @@ if (!builder.Services.Any(x => x.ServiceType == typeof(HttpClient)))
         };
     });
 }
+
+
 
 var app = builder.Build();
 
@@ -41,6 +44,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.MapControllers();
 app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");
 
