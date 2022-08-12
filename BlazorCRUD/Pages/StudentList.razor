@@ -17,14 +17,17 @@ else
     <table class='table table-responsive table-striped'>
         <thead>
             <tr>
+                <th scope="col">Num</th>
                 <th scope="col">Name</th>
                 <th scope="col">Email</th>
+                <th scope="col">Options</th>
             </tr>
         </thead>
         <tbody>
             @foreach (var student in _students)
             {
                 <tr>
+                    <td scope="row">@student.StudentId</td>
                     <td scope="row">@student.Name</td>
                     <td scope="row">@student.Email</td>
                     <td>
@@ -39,10 +42,9 @@ else
 @code {
     [Inject] AppDbContext AppDbContext { get; set; }
     private List<Student> _students = new List<Student>();
-    [Inject] NavigationManager navigationManager { get; set; }
 
     protected override async Task OnInitializedAsync()
-    {   
+    {
         _students = await AppDbContext.Students.ToListAsync();
     }
 
@@ -53,5 +55,4 @@ else
         _students.Remove(StudentDelete);
         StateHasChanged();
     }
-    //<button class="btn btn-info" @onclick="@(() => navigationManager.NavigateTo($"/editStudent/{student.StudentId.ToString()}"))">Edit</button>
 } 
