@@ -3,7 +3,6 @@
 @using BlazorCRUD.Data
 @using Microsoft.EntityFrameworkCore
 
-
 <h3>Students</h3>
 <p>
     <a href="/addstudent" class="btn btn-dark">Create New Student</a>
@@ -40,19 +39,16 @@ else
     </table>
 }
 @code {
-    [Inject] AppDbContext AppDbContext { get; set; }
     private List<Student> _students = new List<Student>();
 
     protected override async Task OnInitializedAsync()
     {
-        _students = await AppDbContext.Students.ToListAsync();
+        _students = await http.GetFromJsonAsync<List<Student>>("/api/students");
     }
 
     private async Task Delete(Student StudentDelete)
     {
-        AppDbContext.Students.Remove(StudentDelete);
-        await AppDbContext.SaveChangesAsync();
+        await http.DeleteAsync("/api/students/"+StudentDelete.StudentId);
         _students.Remove(StudentDelete);
-        StateHasChanged();
     }
 } 

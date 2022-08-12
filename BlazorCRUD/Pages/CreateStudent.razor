@@ -1,4 +1,6 @@
 ﻿@page "/addstudent"
+@inject HttpClient http
+@inject NavigationManager navigationManager
 @using BlazorCRUD.Data
 
 <h1>Create Student</h1>
@@ -21,26 +23,15 @@
     <button class="btn btn-success" type="submit">Save</button>
     <button @onclick="@(() => navigationManager.NavigateTo("/Student"))" class="btn btn-secondary" >Cancel</button>
 
-
-
-
 </EditForm>
 
 @code {
-    [Inject] AppDbContext appDbContext { get; set; }
-    [Inject] NavigationManager navigationManager { get; set; }
-
-    private Student _student = new Student
-    {
-        Name = "",
-        Email = ""
-    };
+    private Student _student = new Student {};
 
     private async Task NewStudent()
     {
-        await appDbContext.Students.AddAsync(_student);
-        await appDbContext.SaveChangesAsync();
-        navigationManager.NavigateTo("/Student");
+        await http.PostAsJsonAsync<Student>("/api/students/", _student);
+        navigationManager.NavigateTo("/Student");        
     }
 
 }
