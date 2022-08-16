@@ -6,7 +6,8 @@ using BlazorCRUD.Data;
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
-
+builder.Services.AddControllers();
+builder.Services.AddSwaggerGen();
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddDbContext<AppDbContext>(options => options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -26,8 +27,6 @@ if (!builder.Services.Any(x => x.ServiceType == typeof(HttpClient)))
     });
 }
 
-
-
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.
@@ -40,12 +39,13 @@ if (!app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
+app.UseSwagger();
+app.UseSwaggerUI();
+
 app.UseStaticFiles();
 
 app.UseRouting();
-
 app.MapControllers();
 app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");
-
 app.Run();
